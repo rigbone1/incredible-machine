@@ -10,26 +10,32 @@ const board = new Board({port: 'COM3'});
 Globals
 ———————
 screen - represents the LCD.
+died   - global flag for the game loop. When true, game is over.
 player - the co-ordinates of the player character.
-cursor - the co-ordinates of the cursor (more general than player).
 obstacleChars - characters for the obstacles which will be picked from by the generateObstacle function.
 
 */
- 
-var screen;
-const player = [1,0], cursor = [1,15];
+
+// Global components
+var screen, buttons;
+
+global.died = false;
+
+var isJumping = false;
+const player = [1,3];
 const obstacleChars = ['duck', 'pointerleft', 'bigpointerleft'];
 
 board.on('ready', () => {
     
     let is_setup = false;
-    
+
     try {
         // Dynamically instantiate buttons.
-        const buttons = {
-            jump:  new Button({ pin: 5, isPullup: true})
+        buttons = {
+            jump:    new Button({ pin: 5, isPullup: true}),
+            restart: new Button({ pin: 4, isPullup: true}),
         }
-        
+
         // Dynamically assigns event handlers.
         for(let btn in buttons){
             // btn is the name of the button (e.g., 'jump').
@@ -47,30 +53,105 @@ board.on('ready', () => {
             cols: 16
         });
         
+        // Set the player characters.
+        screen.useChar('runninga'); // Jump
+        screen.useChar('runningb'); // Idle
+        
+        // Set the obstacle characters.
+        screen.useChar('duck');
+        screen.useChar('pointerleft');
+        screen.useChar('bigpointerleft');
+
         // Let the program know
         // that all's well.
         is_setup = true;
-        
     } catch(e){
         console.log('There was a problem getting set up:', e);
     }
-    
+
     if(!is_setup){
         return console.log("Can't continue without being set up properly. Exiting.");
     }
     
-    // Set the player characters.
-    screen.useChar('runninga'); // Jump
-    screen.useChar('runningb'); // Idle
+    // Begin a game.
+    game();
+});
+
+function moveObstacle(obstacles){
     
-    // Set the obstacle characters.
-    screen.useChar('duck');
-    screen.useChar('pointerleft');
-    screen.useChar('bigpointerleft');
+    // Obstacles is an array of the obstacles currently on screen,
+    // and as such, we should iterate through each obstacle.
+    for(let i = 0; i < obstacles.length; ++i){
+        
+        // Check if this obstacle has hit the player.
+        if(obstacles[i].coords.join('') === player.join('')){
+            died = true;
+            break;
+        }
+        
+        // Clear the previous position.
+        screen.cursor(...obstacles[i].coords).print(' ');
+        
+        // If the obstacle has met the edge of the screen,
+        // remove it from the list, effectively deleting it.
+        if(!obstacles[i].coords[1]){
+            obstacles.splice(i,1);
+            continue;
+        }
+        
+        obstacles[i].coords[1] -= 1;
+        screen.cursor(...obstacles[i].coords).print(`:${obstacles[i].char}:`);
+    }
+}
+
+function generateObstacle(){
+    let r = Math.floor(Math.random() * obstacleChars.length);
+    
+    screen.cursor(1,15).print(`:${obstacleChars[r]}:`);
+    
+    return {
+        coords: [1,15],
+        char: obstacleChars[r]
+    }
+}
+
+// Define the player jump action.
+function jump(){
+    if(!died){
+        isJumping = true;
+        
+        screen.cursor(...player).print(' ');
+        
+        player[0] = 0;
+        screen.cursor(...player).print(':runninga:');
+        
+        setTimeout(() => {
+            screen.cursor(...player).print(' ');
+            
+            player[0] = 1;
+            screen.cursor(...player).print(':runningb:');
+            
+            isJumping = false;
+        }, 1000);
+    }
+    
+}
+
+function restart(){
+    if(died){
+        died = false;
+        game();
+    }
+}
+
+// Store event handlers (a.k.a. game actions, or simply actions).
+const actions = { jump, restart }
+
+function game(){
     
     // Initially wipe the screen,
     // then draw the player.
-    screen.clear().cursor(1,0).print(':runningb:').cursor(1,0);
+    screen.clear().cursor(...player).print(':runningb:');
     
     /*
     
@@ -80,7 +161,6 @@ board.on('ready', () => {
     obstacles - the obstacles currently on the screen.
     
     */
-    let died = false;
     const obstacles = [];
     
     // Game loop.
@@ -88,72 +168,28 @@ board.on('ready', () => {
         
         // If there are no obstacles, generate one.
         // Likewise if the cursor has reached the edge of the screen.
-        if(!obstacles.length || !cursor[1]){
+        if(!obstacles.length){
             obstacles.push(generateObstacle());
         }
+        
         // Otherwise, inch the obstacle ever closer.
         else {
             moveObstacle(obstacles);
         }
         
         // Slow the refreshes down--effectively sets a refresh rate.
-        wait.for.time(1);
+        wait.for.time(.25);
     }
-});
-
-function moveObstacle(obstacles){
     
-    // Obstacles is an array of the obstacles currently on screen,
-    // and as such, we should iterate through each obstacle.
-    for(let i = 0; i < obstacles.length; ++i){
-        
-        // If the obstacle has met the edge of the screen,
-        // remove it from the list, effectively deleting it.
-        if(!obstacles[i].coords[1]){
-            obstacles.slice(i,1);
-            continue;
-        }
-        
-        let coords = [...obstacles[i].coords];
-        screen.cursor(...coords).print(`:${obstacles[i].char}:`);
-        
-        obstacles[i].coords[1]--;
-        
-        screen.cursor(...[coords[0], coords[1]-1]).print(' ');
-    }
-}
-
-function generateObstacle(){
-    let r = Math.floor(Math.random() * obstacleChars.length);
-    
-    screen.cursor(...cursor).print(`:${obstacleChars[r]}:`).cursor(...cursor);
-    
-    return {
-        coords: [...cursor], // avoid creating an object (or array) reference.
-        char: obstacleChars[r]
-    }
-}
-
-// Helper function.
-function draw(string, point){
-    if(!typeof(string) === "String"){
-        throw new Error("That's not a string, budster.");
-    }
-    return screen.print(string).cursor(...point);
-}
-
-// Define the player jump action.
-function jump(){
-    --player[0];
     screen.clear();
-    screen.cursor(...player).print(':runninga:').cursor(...player);
+    gameOver();
+}
+
+function gameOver(){
+    screen.clear().home().print('Game Over');
     
     wait.for.time(1);
     
-    ++player[0];
-    screen.clear();
-    screen.cursor(...player).print(':runningb:').cursor(...player);
+    screen.clear().home().print('Click the button');
+    screen.cursor(1,0).print('to play again.');
 }
-
-// Store event handlers (a.k.a. game actions, or simply actions).
-const actions = { jump }
