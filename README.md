@@ -10,7 +10,7 @@ A recreation of the famous Dino game that appears when you access chrome without
 - A button to jump with
 - A potentiometer to activate dark mode
 
-[put fritz diagram here.]
+![Wiring diagram for the set up.](/images/sketch.png)
 
 ## Requirements
 A finger to click the button with. My condolences to those without fingers.
