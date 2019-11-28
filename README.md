@@ -1,13 +1,14 @@
 ![Bootlegmon](/images/logo.bmp)
 
 ## Premise
-A terrible clone of the famous Pokémon game.
+A terrible rendition of Pokémon. It's not even worthy of the label 'clone', and is more like a cursed amalgamation of the idea of the famous Pokémon series, than an actual, playable, game.
 
 ## Features
 - A 16x2 LCD screen to display the battle options
 - A monochrome OLED on which the sprites are drawn.
 - A piezo to play the sound effects and victory music.
 
+## Sketch
 ![Wiring diagram for the set up.](/images/sketch.png)
 
 ## Requirements
