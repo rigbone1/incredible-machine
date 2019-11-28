@@ -1,19 +1,17 @@
-<h1 align=center>Arduino Dino Game</h1>
+![Bootlegmon](/images/logo.png)
 
 ## Premise
-A recreation of the famous Dino game that appears when you access chrome without a working internet connection (or if you access chrome://dino/) on an Arduino Uno.
-
-![Dino game as seen on chrome.](/images/dino.png)
+A terrible clone of the famous Pokémon game.
 
 ## Features
-- A 16x2 LCD screen to display the game on
-- A button to jump with
-- A potentiometer to activate dark mode
+- A 16x2 LCD screen to display the battle options
+- A monochrome OLED on which the sprites are drawn.
+- A piezo to play the sound effects and victory music.
 
 ![Wiring diagram for the set up.](/images/sketch.png)
 
 ## Requirements
-A finger to click the button with. My condolences to those without fingers.
+A finger to click the buttons with. My condolences to those without fingers.
 
 ## Installation
 Clone this repository with git by doing
