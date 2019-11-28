@@ -1,4 +1,4 @@
-![Bootlegmon](/images/logo.png)
+![Bootlegmon](/images/logo.bmp)
 
 ## Premise
 A terrible clone of the famous Pokémon game.
