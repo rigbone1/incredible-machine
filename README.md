@@ -7,9 +7,22 @@ A terrible rendition of Pokémon. It's not even worthy of the label 'clone', and
 - A 16x2 LCD screen to display the battle options
 - A monochrome OLED on which the sprites are drawn.
 - A piezo to play the sound effects and victory music.
+- Has nice, hand-drawn sprites.
 
-## Sketch (not accurate)
-![Wiring diagram for the set up.](/images/sketch.png)
+## Sprite Work
+<p align=center>
+  <img src="/images/screenshot-eevee.png" width="272px">
+  <img src="/images/screenshot-bag.png" width="272px">
+  <img src="/images/screenshot-pikachu.png" width="272px">
+</p>
+
+## Sketch
+<p align=center>
+  <img src="/images/sketch-diagram.png" width="256px"><br>
+  <a href="https://raw.githubusercontent.com/rigbone1/incredible-machine/master/images/sketch-diagram.png">
+    <i>View full-sized image.</i>
+  </a>
+</p>
 
 ## Requirements
 A finger to click the buttons with. My condolences to those without fingers.
