@@ -1,13 +1,12 @@
 ![Bootlegmon](/images/logo.bmp)
 
 ## Premise
-A terrible rendition of Pokémon. It's not even worthy of the label 'clone', and is more like a cursed amalgamation of the idea of the famous Pokémon series, than an actual, playable, game.
+Click through different screens and battle some Pokemon creatures.
 
 ## Features
 - A 16x2 LCD screen to display the battle options
-- A monochrome OLED on which the sprites are drawn.
-- A piezo to play the sound effects and victory music.
-- Has nice, hand-drawn sprites.
+- A monochrome OLED screen for the sprites
+- A piezo to play SFX and victory music
 
 ## Sprite Work
 <p align=center>
@@ -16,7 +15,7 @@ A terrible rendition of Pokémon. It's not even worthy of the label 'clone', and
   <img src="/images/screenshot-pikachu.png" width="272px">
 </p>
 
-## Sketch
+## Fritzing Diagram
 <p align=center>
   <img src="/images/sketch-diagram.png" width="256px"><br>
   <a href="https://raw.githubusercontent.com/rigbone1/incredible-machine/master/images/sketch-diagram.png">
@@ -24,23 +23,17 @@ A terrible rendition of Pokémon. It's not even worthy of the label 'clone', and
   </a>
 </p>
 
-## Requirements
-A finger to click the buttons with. My condolences to those without fingers.
-
 ## Installation
-Clone this repository with git by doing
-
+1. Clone
 ```git
 git clone https://github.com/rigbone1/incredible-machine.git
 ```
-
-Then, install the dependencies by running the following:
+2. CD + install dependencies
 ```
 cd incredible-machine
 npm install
 ```
-
-Finally, to run the project, run:
+3. Run game
 ```
 node game
 ```
