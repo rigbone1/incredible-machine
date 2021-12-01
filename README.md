@@ -25,15 +25,15 @@ Click through different screens and battle some Pokemon creatures.
 
 ## Installation
 1. Clone
-```git
-git clone https://github.com/rigbone1/incredible-machine.git
 ```
-2. CD + install dependencies
+git clone https://github.com/daveg1/incredible-machine
+```
+2. Install
 ```
 cd incredible-machine
 npm install
 ```
-3. Run game
+3. Run
 ```
 node game
 ```
